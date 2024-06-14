@@ -15,10 +15,16 @@
 
 **Locally**
 
+Установить необходимые пакеты и зависимости:
 ```Bash
 pip install -r requirements.txt
 ```
+Загрузить обученную модель с Git Large File Storage:
 
+```Bash
+git lfs install
+git lfs pull
+```
 После установки зависимостей можно запустить сервис:
 
 ```Bash
