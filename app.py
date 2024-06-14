@@ -32,7 +32,6 @@ def upload_file():
 
         # Perform inference
         results = model.predict(source=filename, save=True)
-
         # Path to the result image
         result_image_name = file.filename.rsplit('.', 1)[0] + '_pred.jpg'
         result_image_path = os.path.join(app.config['UPLOAD_FOLDER'], result_image_name)
@@ -46,8 +45,12 @@ def upload_file():
 # Display the result image
 @app.route('/result/<filename>')
 def show_result(filename):
-    print(filename)
     return render_template('result.html', filename=filename)
+
+# Map route
+@app.route('/map')
+def map_page():
+    return render_template('map.html')
 
 # Serve the uploaded files
 @app.route('/uploads/<filename>')
