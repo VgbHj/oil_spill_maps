@@ -32,20 +32,34 @@ def upload_file():
 
         # Perform inference
         results = model.predict(source=filename, save=True)
-        # Path to the result image
-        result_image_name = file.filename.rsplit('.', 1)[0] + '_pred.jpg'
-        result_image_path = os.path.join(app.config['UPLOAD_FOLDER'], result_image_name)
 
-        # Rename the result image to ensure it can be accessed
-        saved_image_path = filename.rsplit('.', 1)[0] + '_0.jpg'
-        os.rename(saved_image_path, result_image_path)
+        # Extract the directory where results are saved
+        save_dir = results[0].save_dir
 
-        return redirect(url_for('show_result', filename=result_image_name))
+        # Assuming the result image has a '_0' suffix as saved by YOLO
+        result_image_name = file.filename.rsplit('.', 1)[0] + '_0.jpg'
+        result_image_path = os.path.join(save_dir, result_image_name)
+
+        print(result_image_path)
+
+        # Verify the result image exists
+        if os.path.exists(save_dir):
+            return redirect(url_for('show_result', full_filename=result_image_path))
+        else:
+            return 'Error: Result image not found.'
 
 # Display the result image
-@app.route('/result/<filename>')
-def show_result(filename):
-    return render_template('result.html', filename=filename)
+@app.route('/result')
+def show_result():
+    full_filename = request.args.get('full_filename')
+    return render_template('result.html', full_filename=full_filename)
+
+# Serve the files from their respective directories
+@app.route('/results/<path:filename>')
+def result_file(filename):
+    directory = os.path.dirname(filename)
+    file = os.path.basename(filename)
+    return send_from_directory(directory, file)
 
 # Map route
 @app.route('/map')
