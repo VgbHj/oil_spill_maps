@@ -58,22 +58,13 @@ def upload_file():
         print(f"Results saved to: {save_dir}")
 
         # Assuming the result image has a '_0' suffix as saved by YOLO
-        result_image_name = file.filename.rsplit('.', 1)[0] + '_0.jpg'
+        result_image_name = file.filename.rsplit('.', 1)[0] + '.jpg'
         result_image_path = os.path.join(save_dir, result_image_name)
 
         print(result_image_path)
 
-        # Here you would process the results to extract coordinates
-        # Example of storing coordinates in the database
-        # coordinates = extract_coordinates(results)
-        coordinates = [(100.0, 200.0)]  # Dummy data; replace with actual extraction logic
-        db = get_db()
-        for x, y in coordinates:
-            db.execute('INSERT INTO oil_stains (filename, x, y) VALUES (?, ?, ?)', (filename, x, y))
-        db.commit()
-
         # Verify the result image exists
-        if os.path.exists(result_image_path):
+        if os.path.exists(save_dir):
             return redirect(url_for('show_result', result_image=result_image_path, uploaded_image=filename))
         else:
             return 'Error: Result image not found.'
