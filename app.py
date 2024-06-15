@@ -67,10 +67,13 @@ def upload_file():
         print(result_image_path)
 
         coordinates = [(100.0, 200.0)]  # Dummy data; replace with actual extraction logic
-        db = get_db()
-        for x, y in coordinates:
-            db.execute('INSERT INTO oil_stains (filename, x, y) VALUES (?, ?, ?)', (filename, x, y))
-        db.commit()
+        try:
+            db = get_db()
+            for x, y in coordinates:
+                db.execute('INSERT INTO oil_stains (filename, x, y) VALUES (?, ?, ?)', (filename, x, y))
+            db.commit()
+        except sqlite3.Error as e:
+            print(f"An error occurred: {e}")
 
         # Verify the result image exists
         if os.path.exists(save_dir):
@@ -108,9 +111,12 @@ def map_page():
 def add_coordinates():
     x = request.form['x']
     y = request.form['y']
-    db = get_db()
-    db.execute('INSERT INTO oil_stains (filename, x, y) VALUES (?, ?, ?)', ('manual', x, y))
-    db.commit()
+    try:
+        db = get_db()
+        db.execute('INSERT INTO oil_stains (filename, x, y) VALUES (?, ?, ?)', ('manual', x, y))
+        db.commit()
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
     return redirect(url_for('map_page'))
 
 if __name__ == '__main__':
