@@ -38,4 +38,4 @@ python db_setup.py
 
 ## 2. Пример работы
 
-![img.png](exapmle.png)
+![example.png](example.png)
