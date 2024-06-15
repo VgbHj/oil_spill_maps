@@ -162,3 +162,5 @@ cython_debug/
 #.idea/
 
 runs/
+uploads/
+oil_stains.db
