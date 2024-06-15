@@ -58,7 +58,7 @@ def upload_file():
         print(f"Results saved to: {save_dir}")
 
         # Assuming the result image has a '_0' suffix as saved by YOLO
-        result_image_name = file.filename.rsplit('.', 1)[0] + '.jpg'
+        result_image_name = file.filename
         result_image_path = os.path.join(save_dir, result_image_name)
 
         print(result_image_path)
