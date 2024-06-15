@@ -9,7 +9,16 @@
 <body>
     <div class="container mt-5 text-center">
         <h1>Detection Result</h1>
-        <img src="{{ full_filename }}" alt="Result Image" class="img-fluid">
+        <div class="row">
+            <div class="col">
+                <h2>Uploaded Image</h2>
+                <img src="{{ url_for('uploaded_file', filename=uploaded_image.split('/')[-1]) }}" alt="Uploaded Image" class="img-fluid">
+            </div>
+            <div class="col">
+                <h2>Result Image</h2>
+                <img src="{{ url_for('result_file', filename=result_image) }}" alt="Result Image" class="img-fluid">
+            </div>
+        </div>
         <br>
         <a href="/" class="btn btn-primary mt-3">Upload another image</a>
     </div>
