@@ -4,20 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <title>Oil Spill Detection</title>
+    <title>Upload Image</title>
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">Upload an Image for Oil Spill Detection</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data" class="mt-4">
+        <h1 class="text-center">Upload Image</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="file" name="file" accept="image/*" class="form-control-file">
+                <label for="file">Choose image</label>
+                <input type="file" class="form-control-file" id="file" name="file">
             </div>
-            <button type="submit" class="btn btn-primary">Upload Image</button>
+            <button type="submit" class="btn btn-primary">Upload</button>
         </form>
-        <div class="mt-3">
-            <a href="/map" class="btn btn-info">View Oil Spill Map</a>
-        </div>
+        <hr>
+        <h2 class="text-center">Add Coordinates Manually</h2>
+        <form action="/add_coordinates" method="post">
+            <div class="form-group">
+                <label for="x">X Coordinate</label>
+                <input type="text" class="form-control" id="x" name="x">
+            </div>
+            <div class="form-group">
+                <label for="y">Y Coordinate</label>
+                <input type="text" class="form-control" id="y" name="y">
+            </div>
+            <button type="submit" class="btn btn-primary">Add Coordinates</button>
+        </form>
+        <hr>
+        <a href="/map" class="btn btn-secondary">View Map</a>
     </div>
 </body>
 </html>

@@ -30,3 +30,8 @@ git lfs pull
 ```Bash
 python app.py
 ```
+
+Подключение дб
+```Bash
+python db_setup.py
+```

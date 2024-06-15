@@ -1,6 +1,7 @@
 import os
 import shutil
-from flask import Flask, request, render_template, send_from_directory, redirect, url_for
+import sqlite3
+from flask import Flask, request, render_template, send_from_directory, redirect, url_for, g
 from ultralytics import YOLO
 
 # Initialize the Flask app
@@ -16,6 +17,20 @@ app.config['RUNS_FOLDER'] = RUNS_FOLDER
 
 # Load the YOLO model
 model = YOLO("best.pt")
+
+DATABASE = 'oil_stains.db'
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 # Home route
 @app.route('/')
@@ -40,13 +55,25 @@ def upload_file():
 
         # Extract the directory where results are saved
         save_dir = results[0].save_dir
-        print(f"Results saved to: {save_dir}")
+        segments = save_dir.split('/')
+        true_save_dir = segments[-3:]
+        true_save_dir = '/'.join(true_save_dir)
+        print(f"Results saved to: {true_save_dir}")
 
         # Assuming the result image has a '_0' suffix as saved by YOLO
-        result_image_name = file.filename.rsplit('.', 1)[0] + '.jpg'
-        result_image_path = os.path.join(save_dir, result_image_name)
+        result_image_name = file.filename
+        result_image_path = os.path.join(true_save_dir, result_image_name)
 
         print(result_image_path)
+
+        coordinates = [(100.0, 200.0)]  # Dummy data; replace with actual extraction logic
+        try:
+            db = get_db()
+            for x, y in coordinates:
+                db.execute('INSERT INTO oil_stains (filename, x, y) VALUES (?, ?, ?)', (filename, x, y))
+            db.commit()
+        except sqlite3.Error as e:
+            print(f"An error occurred: {e}")
 
         # Verify the result image exists
         if os.path.exists(save_dir):
@@ -67,15 +94,30 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # Serve the result files
-@app.route('/<path:filename>')
+@app.route('/results/<path:filename>')
 def result_file(filename):
     return send_from_directory('', filename)
 
 # Map route
 @app.route('/map')
 def map_page():
-    return render_template('map.html')
+    db = get_db()
+    cur = db.execute('SELECT x, y FROM oil_stains')
+    coordinates = cur.fetchall()
+    return render_template('map.html', coordinates=coordinates)
 
-# Run the app
+# Add coordinates manually
+@app.route('/add_coordinates', methods=['POST'])
+def add_coordinates():
+    x = request.form['x']
+    y = request.form['y']
+    try:
+        db = get_db()
+        db.execute('INSERT INTO oil_stains (filename, x, y) VALUES (?, ?, ?)', ('manual', x, y))
+        db.commit()
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+    return redirect(url_for('map_page'))
+
 if __name__ == '__main__':
     app.run(debug=True)
