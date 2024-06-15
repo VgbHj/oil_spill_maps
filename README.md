@@ -35,3 +35,7 @@ python app.py
 ```Bash
 python db_setup.py
 ```
+
+## 2. Пример работы
+
+![img.png](exapmle.png)
