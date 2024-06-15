@@ -66,6 +66,12 @@ def upload_file():
 
         print(result_image_path)
 
+        coordinates = [(100.0, 200.0)]  # Dummy data; replace with actual extraction logic
+        db = get_db()
+        for x, y in coordinates:
+            db.execute('INSERT INTO oil_stains (filename, x, y) VALUES (?, ?, ?)', (filename, x, y))
+        db.commit()
+
         # Verify the result image exists
         if os.path.exists(save_dir):
             return redirect(url_for('show_result', result_image=result_image_path, uploaded_image=filename))
