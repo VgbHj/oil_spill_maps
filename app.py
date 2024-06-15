@@ -55,11 +55,14 @@ def upload_file():
 
         # Extract the directory where results are saved
         save_dir = results[0].save_dir
-        print(f"Results saved to: {save_dir}")
+        segments = save_dir.split('/')
+        true_save_dir = segments[-3:]
+        true_save_dir = '/'.join(true_save_dir)
+        print(f"Results saved to: {true_save_dir}")
 
         # Assuming the result image has a '_0' suffix as saved by YOLO
         result_image_name = file.filename
-        result_image_path = os.path.join(save_dir, result_image_name)
+        result_image_path = os.path.join(true_save_dir, result_image_name)
 
         print(result_image_path)
 
