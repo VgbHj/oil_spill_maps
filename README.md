@@ -20,28 +20,26 @@
 pip install -r requirements.txt
 ```
 Загрузить обученную модель с Git Large File Storage:
-
 ```Bash
 git lfs install
 git lfs pull
 ```
 После установки зависимостей можно запустить сервис:
-
 ```Bash
 python app.py
 ```
+Подключение дб
+```Bash
+python db_setup.py
+```
 
-**Via Docker**
+**Via Docker (recommended)**
+
 ```Bach
 docker-compose build
 docker-compose run
 ```
 
-
-Подключение дб
-```Bash
-python db_setup.py
-```
 
 ## 2. Пример работы
 
