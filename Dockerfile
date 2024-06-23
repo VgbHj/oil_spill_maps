@@ -1,5 +1,5 @@
 # Use the official Python base image
-FROM python:3.9-slim
+FROM python:3.12-slim
 
 # Set the working directory in the container
 WORKDIR /app
@@ -19,6 +19,8 @@ COPY . /app
 
 # Pull the LFS files
 RUN git lfs pull
+
+RUN pip install --upgrade pip
 
 # Install any dependencies specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
