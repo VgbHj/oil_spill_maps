@@ -4,8 +4,21 @@ FROM python:3.9-slim
 # Set the working directory in the container
 WORKDIR /app
 
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
+    && apt-get install -y git-lfs \
+    && git lfs install
+
 # Copy the current directory contents into the container at /app
 COPY . /app
+
+# Pull the LFS files
+RUN git lfs pull
 
 # Install any dependencies specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
