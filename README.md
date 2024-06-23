@@ -31,6 +31,13 @@ git lfs pull
 python app.py
 ```
 
+**Via Docker**
+```Bach
+docker-compose build
+docker-compose run
+```
+
+
 Подключение дб
 ```Bash
 python db_setup.py
