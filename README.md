@@ -37,7 +37,7 @@ python db_setup.py
 
 ```Bach
 docker-compose build
-docker-compose run
+docker-compose up
 ```
 
 
